@@ -1,4 +1,4 @@
-const { Observable, Observer } = require("./index");
+const { Observable, Observer } = require("./../index");
 
 test("the subscription should return an instance of Observer", () => {
 	const o = new Observable();
@@ -19,12 +19,10 @@ test("The Observable should call the Observer with the next value", () => {
 test("The Observer should stop emitting when unsubscribed", () => {
 	const o = new Observable();
 	const callback = jest.fn();
-	// subscribe
 	const subscription = o.subscribe(callback);
 	// call our callback once
 	o.next(1);
 	expect(callback).toBeCalled();
-	// unsubscribe
 	subscription.unsubscribe();
 	// this shouldn't reach our callback
 	o.next(2);

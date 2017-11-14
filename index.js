@@ -1,3 +1,7 @@
-export * from "./observable";
-export * from "./observer";
-export * from "./event-observable";
+// core exports
+export * from "./src/observable";
+export * from "./src/observer";
+export * from "./src/operators";
+
+// additional exports/utilities
+export * from "./src/event-observable";

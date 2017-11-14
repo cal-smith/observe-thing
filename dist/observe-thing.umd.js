@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -83,8 +83,11 @@ return /******/ (function(modules) { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Observable = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _observer = __webpack_require__(1);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -153,7 +156,7 @@ var Observable = exports.Observable = function () {
   }, {
     key: "subscribe",
     value: function subscribe(fn) {
-      var newObserver = new Observer(fn);
+      var newObserver = new _observer.Observer(fn);
       this.observers.push(newObserver);
       return newObserver;
     }
@@ -177,53 +180,6 @@ var Observable = exports.Observable = function () {
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _observable = __webpack_require__(0);
-
-Object.keys(_observable).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _observable[key];
-    }
-  });
-});
-
-var _observer = __webpack_require__(2);
-
-Object.keys(_observer).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _observer[key];
-    }
-  });
-});
-
-var _eventObservable = __webpack_require__(3);
-
-Object.keys(_eventObservable).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _eventObservable[key];
-    }
-  });
-});
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -277,7 +233,113 @@ var Observer = exports.Observer = function () {
 }();
 
 /***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _observable = __webpack_require__(0);
+
+Object.keys(_observable).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _observable[key];
+    }
+  });
+});
+
+var _observer = __webpack_require__(1);
+
+Object.keys(_observer).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _observer[key];
+    }
+  });
+});
+
+var _operators = __webpack_require__(3);
+
+Object.keys(_operators).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _operators[key];
+    }
+  });
+});
+
+var _eventObservable = __webpack_require__(4);
+
+Object.keys(_eventObservable).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _eventObservable[key];
+    }
+  });
+});
+
+/***/ }),
 /* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.filter = exports.map = undefined;
+
+var _observable = __webpack_require__(0);
+
+/*
+ * functions to work with and transform Observables
+ * similar in many ways to rxjs's operators, but
+ * written in a more functional style
+ */
+
+var map = exports.map = function map(fn, sourceObservable) {
+  if (!sourceObservable) {
+    return map.bind(null, fn);
+  }
+  console.log("h", fn, sourceObservable);
+  var mappedObservable = new _observable.Observable();
+  sourceObservable.subscribe(function (value) {
+    console.log("wtf", value, fn(value));
+    mappedObservable.next(fn(value));
+  });
+  console.log(mappedObservable);
+  return mappedObservable;
+};
+
+var filter = exports.filter = function filter(fn, sourceObservable) {
+  if (!sourceObservable) {
+    return filter.bind(null, fn);
+  }
+  var filteredObservable = new _observable.Observable();
+  sourceObservable.subscribe(function (value) {
+    if (fn(value)) {
+      filteredObservable.next(value);
+    }
+  });
+  return filteredObservable;
+};
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

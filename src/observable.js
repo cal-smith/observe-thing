@@ -8,9 +8,12 @@ import { Observer } from "./observer";
  * to each Observer to decide how to handle the message
  */
 export class Observable {
-  constructor() {
+  constructor(sourceObservable) {
     this.observers = [];
     this.active = true;
+    if (sourceObservable) {
+      sourceObservable.subscribe(value => this.next(value));
+    }
   }
   
   // recives the next value and trys to notifyObservers
